@@ -1,0 +1,21 @@
+name: Reusable Security Gate
+
+on:
+  workflow_call:
+    inputs:
+      fail_on_critical:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  security-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static Security Scan (Semgrep)
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: p/security-audit
+      - name: Secrets Detection (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2

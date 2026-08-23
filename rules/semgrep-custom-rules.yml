@@ -1,0 +1,18 @@
+rules:
+  - id: python-hardcoded-jwt-secret
+    patterns:
+      - pattern: |
+          jwt.encode(..., secret_key="$SECRET", ...)
+      - metavariable-regex:
+          metavariable: $SECRET
+          regex: ^(secret|test|123456|password|admin)$
+    message: "Hardcoded weak JWT secret detected. Use environment variables!"
+    languages: [python]
+    severity: ERROR
+
+  - id: insecure-md5-usage
+    patterns:
+      - pattern: hashlib.md5(...)
+    message: "MD5 is cryptographically broken. Use SHA-256 or SHA-3."
+    languages: [python]
+    severity: WARNING
